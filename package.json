@@ -21,13 +21,15 @@
     "react-native-gesture-handler": "~2.24.0",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
-    "react-native-screens": "~4.10.0"
+    "react-native-screens": "~4.10.0",
+    "react-native-svg": "15.11.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-typescript": "^7.27.1",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.0.10",
+    "react-native-svg-transformer": "^1.5.1",
     "ts-jest": "^29.3.2",
     "typescript": "~5.8.3"
   },

@@ -1,19 +1,30 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Button, Image, TextInput } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../Types';
+import { RootStackParamList } from '../Types/Types';
 import { WEATHER_SCREEN_NAME } from '../Constants/Screens';
+
+import DroneLogo from '../Assets/drone.svg';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const HomeScreen = ({ navigation }: Props) => {
+  const [icao, setIcao] = useState('');
+
+  const handleNavigate = () => {
+    if (icao.trim().length === 4) {
+      navigation.navigate(WEATHER_SCREEN_NAME, { icao: icao.toUpperCase() });
+    } else {
+      alert('Please enter a valid 4-letter ICAO code.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <Image
-          source={require('../Assets/drone.svg')}
-          style={styles.logo}
-        />
+    
+        
+        <DroneLogo width={120} height={120} />
       </View>
 
       <Text style={styles.title}>Aviation Weather</Text>
@@ -22,10 +33,19 @@ const HomeScreen = ({ navigation }: Props) => {
         Designed specifically for drone pilots to check METAR and TAF conditions with ease.
       </Text>
 
+      <TextInput
+        placeholder="Enter ICAO Code (e.g. KATL)"
+        style={styles.input}
+        value={icao}
+        onChangeText={setIcao}
+        autoCapitalize="characters"
+        maxLength={4}
+      />
+
       <View style={styles.buttonContainer}>
         <Button
           title="Let's Go"
-          onPress={() => navigation.navigate(WEATHER_SCREEN_NAME)}
+          onPress={handleNavigate}
           color="#0055A4"
         />
       </View>
@@ -72,7 +92,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     textAlign: 'center',
-    marginBottom: 30
+    marginBottom: 20
+  },
+  input: {
+    width: '80%',
+    borderColor: '#0055A4',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    backgroundColor: '#fff',
+    marginBottom: 20,
+    fontSize: 16,
+    textAlign: 'center',
+    letterSpacing: 2
   },
   buttonContainer: {
     width: '60%',
