@@ -7,6 +7,7 @@ import { RouteProp } from '@react-navigation/native';
 
 import MetarWidget from '../Components/MetarWidget';
 import BannerWidget from '../Components/BannerWidget'; // New import
+import { S_AIRSPACE_AUTHORIZATION_NOTICE } from '../Constants/Strings';
 
 type WeatherScreenRouteProp = RouteProp<RootStackParamList, 'Weather'>;
 
@@ -70,6 +71,9 @@ const WeatherScreen = () => {
 
       {!loading && !error && (
         <ScrollView style={styles.weatherContainer}>
+          {/* Show banner first */}
+          <Text style={styles.notice}>{S_AIRSPACE_AUTHORIZATION_NOTICE}</Text>
+          <BannerWidget visibility={visibility} clouds={clouds} />
 
           <Text style={styles.weatherTitle}>METAR</Text>
           {metar && <MetarWidget metar={metar} />}
@@ -102,6 +106,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 10,
     color: '#002244',
+  },
+  notice: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
   },
   weatherData: {
     fontSize: 14,

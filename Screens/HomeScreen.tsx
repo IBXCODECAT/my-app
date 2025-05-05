@@ -5,6 +5,7 @@ import { RootStackParamList } from '../Types/Types';
 import { WEATHER_SCREEN_NAME } from '../Constants/Screens';
 
 import DroneLogo from '../Assets/drone.svg';
+import { S_HOME_DESCRIPTION } from '../Constants/Strings';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -29,9 +30,7 @@ const HomeScreen = ({ navigation }: Props) => {
 
       <Text style={styles.title}>Aviation Weather</Text>
       <Text style={styles.subtitle}>Created by Nathan Schmitt</Text>
-      <Text style={styles.description}>
-        Designed specifically for drone pilots to check METAR and TAF conditions with ease.
-      </Text>
+      <Text style={styles.description}>{S_HOME_DESCRIPTION}</Text>
 
       <TextInput
         placeholder="Enter ICAO Code (e.g. KATL)"
@@ -46,6 +45,13 @@ const HomeScreen = ({ navigation }: Props) => {
         <Button
           title="Let's Go"
           onPress={handleNavigate}
+          color="#0055A4"
+        />
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <Button
+          title="View Legistlation"
           color="#0055A4"
         />
       </View>

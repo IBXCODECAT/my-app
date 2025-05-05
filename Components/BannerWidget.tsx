@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { S_OPERATION_LEGAL_WEATHER, S_OPERATION_PROHIBITED_WEATHER } from '../Constants/Strings';
 
 interface CloudLayer {
   type: string;
@@ -35,8 +36,8 @@ const BannerWidget = ({ visibility, clouds, custom }: Props) => {
 
   const type = custom?.type || (legal ? 'legal' : 'illegal');
   const message = custom?.message || (legal
-    ? 'Weather conditions support SUAS flight under Part 107. Always verify aircraft limits, airspace, and preflight checks.'
-    : 'Drone operations are not legal under Part 107 due to visibility or cloud ceiling. Remain grounded until conditions improve.');
+    ? S_OPERATION_LEGAL_WEATHER
+    : S_OPERATION_PROHIBITED_WEATHER);
 
   return (
     <View style={[styles.banner, styles[type]]}>

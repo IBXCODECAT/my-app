@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import BannerWidget from './BannerWidget';
+import { S_OPERATION_ALTITUDE_WARNING } from '../Constants/Strings';
 
 interface CloudLayer {
   type: string;
@@ -93,8 +94,6 @@ const MetarWidget = ({ metar }: Props) => {
 
   return (
     <View style={styles.widgetContainer}>
-      <BannerWidget visibility={details.visibility} clouds={details.clouds} />
-
       <Text style={styles.label}>Temperature</Text>
       <Text style={styles.value}>{details.temperature}</Text>
 
@@ -130,7 +129,7 @@ const MetarWidget = ({ metar }: Props) => {
           clouds={details.clouds}
           custom={{
             type: 'caution',
-            message: `Unless a waiver has been granted, your maximum legal operational altitude is ${altitudeLimit} ft AGL due to cloud ceiling restrictions.`,
+            message: S_OPERATION_ALTITUDE_WARNING(altitudeLimit),
           }}
         />
       )}
