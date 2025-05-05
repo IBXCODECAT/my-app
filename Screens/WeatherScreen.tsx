@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { getMetar, getTaf } from '../Services/WeatherService'; // Assuming you've created this service
-import { RootStackParamList } from '../Types/Types';  // Import the RootStackParamList type
-import { RouteProp } from '@react-navigation/native';  // Import RouteProp to define types for route
+import { getMetar, getTaf } from '../Services/WeatherService';
+import { RootStackParamList } from '../Types/Types';
+import { RouteProp } from '@react-navigation/native';
 
-// Update the type for route.params
+import MetarWidget from '../Components/MetarWidget';
+import BannerWidget from '../Components/BannerWidget'; // New import
+
 type WeatherScreenRouteProp = RouteProp<RootStackParamList, 'Weather'>;
+
+const extractVisibilityAndClouds = (metar: string) => {
+  const visMatch = metar.match(/ (\d{1,2})SM/) || metar.match(/ (\d{4}) /);
+  const visibility = visMatch ? (visMatch[1].length === 4 ? `${visMatch[1]}m` : `${visMatch[1]}SM`) : 'N/A';
+
+  const cloudRegex = /(FEW|SCT|BKN|OVC)(\d{3})/g;
+  const clouds = [];
+  let match;
+  while ((match = cloudRegex.exec(metar)) !== null) {
+    clouds.push({
+      type: match[1],
+      altitude: `${parseInt(match[2]) * 100} ft`,
+    });
+  }
+
+  return { visibility, clouds };
+};
 
 const WeatherScreen = () => {
   const navigation = useNavigation();
-  const route = useRoute<WeatherScreenRouteProp>();  // Specify the correct route type
-  const { icao } = route.params;  // ICAO code passed from the HomeScreen
+  const route = useRoute<WeatherScreenRouteProp>();
+  const { icao } = route.params;
 
   const [metar, setMetar] = useState<string | null>(null);
   const [taf, setTaf] = useState<string | null>(null);
@@ -22,6 +41,7 @@ const WeatherScreen = () => {
     const fetchWeatherData = async () => {
       setLoading(true);
       setError(null);
+
       try {
         const metarData = await getMetar(icao);
         const tafData = await getTaf(icao);
@@ -37,9 +57,10 @@ const WeatherScreen = () => {
     fetchWeatherData();
   }, [icao]);
 
+  const { visibility, clouds } = metar ? extractVisibilityAndClouds(metar) : { visibility: '0SM', clouds: [] };
+
   return (
     <View style={styles.container}>
-      <Button title="Back" onPress={() => navigation.goBack()} color="#0055A4" />
 
       <Text style={styles.title}>Weather for {icao}</Text>
 
@@ -49,8 +70,9 @@ const WeatherScreen = () => {
 
       {!loading && !error && (
         <ScrollView style={styles.weatherContainer}>
+
           <Text style={styles.weatherTitle}>METAR</Text>
-          <Text style={styles.weatherData}>{metar}</Text>
+          {metar && <MetarWidget metar={metar} />}
 
           <Text style={styles.weatherTitle}>TAF</Text>
           <Text style={styles.weatherData}>{taf}</Text>
