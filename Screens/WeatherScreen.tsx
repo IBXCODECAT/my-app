@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { getMetar, getTaf } from '../Services/WeatherService';
 import { RootStackParamList } from '../Types/Types';
@@ -7,7 +7,7 @@ import { RouteProp } from '@react-navigation/native';
 
 import MetarWidget from '../Components/MetarWidget';
 import BannerWidget from '../Components/BannerWidget'; // New import
-import { S_AIRSPACE_AUTHORIZATION_NOTICE } from '../Constants/STRINGS';
+import { S_AIRSPACE_AUTHORIZATION_NOTICE, S_NO_WEATHER_SERVICES } from '../Constants/STRINGS'; // Assuming you'll add this string
 import { REGEX_CLOUDS, REGEX_VISIBILITY } from '../Constants/REGEX';
 
 type WeatherScreenRouteProp = RouteProp<RootStackParamList, 'Weather'>;
@@ -37,17 +37,24 @@ const WeatherScreen = () => {
   const [taf, setTaf] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [noWeatherData, setNoWeatherData] = useState(false);
 
   useEffect(() => {
     const fetchWeatherData = async () => {
       setLoading(true);
       setError(null);
+      setNoWeatherData(false);
 
       try {
         const metarData = await getMetar(icao);
         const tafData = await getTaf(icao);
-        setMetar(metarData);
-        setTaf(tafData);
+
+        if (metarData === "" || tafData === "") {
+          setNoWeatherData(true);
+        } else {
+          setMetar(metarData);
+          setTaf(tafData);
+        }
       } catch (err) {
         setError('Failed to fetch weather data');
       } finally {
@@ -69,7 +76,13 @@ const WeatherScreen = () => {
 
       {error && <Text style={styles.error}>{error}</Text>}
 
-      {!loading && !error && (
+      {!loading && !error && noWeatherData && (
+        <View style={styles.noDataContainer}>
+          <Text style={styles.noDataText}>{S_NO_WEATHER_SERVICES}</Text>
+        </View>
+      )}
+
+      {!loading && !error && !noWeatherData && (
         <ScrollView style={styles.weatherContainer}>
           {/* Show banner first */}
           <Text style={styles.notice}>{S_AIRSPACE_AUTHORIZATION_NOTICE}</Text>
@@ -122,6 +135,17 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 16,
     marginTop: 20,
+  },
+  noDataContainer: {
+    padding: 20,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  noDataText: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
   },
 });
 

@@ -13,5 +13,7 @@ export const S_OPERATION_PROHIBITED_WEATHER =
 export const S_HOME_DESCRIPTION =
 "Designed specifically for drone pilots to check METAR and TAF conditions with ease."
 
+export const S_NO_WEATHER_SERVICES =
+    `No weather services available for the provided ICAO code. Please check the code and try again.`
 export const S_OPERATION_ALTITUDE_WARNING = (altitudeLimit: number) => 
     `Unless the flight can predictably maintain at least 2000ft horizontal distance from a cloud, the maximum legal operational altitude is ${altitudeLimit}ft AGL due to the cloud ceiling.`;
