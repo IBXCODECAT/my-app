@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, Image, TextInput } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../Types/Types';
-import { WEATHER_SCREEN_NAME } from '../Constants/Screens';
+import { LEGISLATION_SCREEN_NAME, WEATHER_SCREEN_NAME } from '../Constants/SCREENS';
 
 import DroneLogo from '../Assets/drone.svg';
-import { S_HOME_DESCRIPTION } from '../Constants/Strings';
+import { S_HOME_DESCRIPTION } from '../Constants/STRINGS';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const HomeScreen = ({ navigation }: Props) => {
   const [icao, setIcao] = useState('');
 
-  const handleNavigate = () => {
+  const handleNavigateWeather = () => {
     if (icao.trim().length === 4) {
       navigation.navigate(WEATHER_SCREEN_NAME, { icao: icao.toUpperCase() });
     } else {
       alert('Please enter a valid 4-letter ICAO code.');
     }
   };
+
+  const handleNavigateLegistlation = () => {
+    navigation.navigate(LEGISLATION_SCREEN_NAME);
+  }
 
   return (
     <View style={styles.container}>
@@ -44,7 +48,7 @@ const HomeScreen = ({ navigation }: Props) => {
       <View style={styles.buttonContainer}>
         <Button
           title="Let's Go"
-          onPress={handleNavigate}
+          onPress={handleNavigateWeather}
           color="#0055A4"
         />
       </View>
@@ -52,6 +56,7 @@ const HomeScreen = ({ navigation }: Props) => {
       <View style={styles.buttonContainer}>
         <Button
           title="View Legistlation"
+          onPress={handleNavigateLegistlation}
           color="#0055A4"
         />
       </View>

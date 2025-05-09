@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import BannerWidget from './BannerWidget';
-import { S_OPERATION_ALTITUDE_WARNING } from '../Constants/Strings';
+import { S_OPERATION_ALTITUDE_WARNING } from '../Constants/STRINGS';
 
 interface CloudLayer {
   type: string;

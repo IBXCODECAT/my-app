@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { S_OPERATION_LEGAL_WEATHER, S_OPERATION_PROHIBITED_WEATHER } from '../Constants/Strings';
+import { S_OPERATION_LEGAL_WEATHER, S_OPERATION_PROHIBITED_WEATHER } from '../Constants/STRINGS';
 
 interface CloudLayer {
   type: string;

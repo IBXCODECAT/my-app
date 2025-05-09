@@ -7,18 +7,18 @@ import { RouteProp } from '@react-navigation/native';
 
 import MetarWidget from '../Components/MetarWidget';
 import BannerWidget from '../Components/BannerWidget'; // New import
-import { S_AIRSPACE_AUTHORIZATION_NOTICE } from '../Constants/Strings';
+import { S_AIRSPACE_AUTHORIZATION_NOTICE } from '../Constants/STRINGS';
+import { REGEX_CLOUDS, REGEX_VISIBILITY } from '../Constants/REGEX';
 
 type WeatherScreenRouteProp = RouteProp<RootStackParamList, 'Weather'>;
 
 const extractVisibilityAndClouds = (metar: string) => {
-  const visMatch = metar.match(/ (\d{1,2})SM/) || metar.match(/ (\d{4}) /);
+  const visMatch = metar.match(REGEX_VISIBILITY);// || metar.match(/ (\d{4}) /);
   const visibility = visMatch ? (visMatch[1].length === 4 ? `${visMatch[1]}m` : `${visMatch[1]}SM`) : 'N/A';
 
-  const cloudRegex = /(FEW|SCT|BKN|OVC)(\d{3})/g;
   const clouds = [];
   let match;
-  while ((match = cloudRegex.exec(metar)) !== null) {
+  while ((match = REGEX_CLOUDS.exec(metar)) !== null) {
     clouds.push({
       type: match[1],
       altitude: `${parseInt(match[2]) * 100} ft`,
